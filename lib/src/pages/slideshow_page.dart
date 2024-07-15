@@ -24,15 +24,15 @@ class SlideshowPage extends StatelessWidget {
 class _Dots extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       width: double.infinity,
       height: 70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          _Dot(),
-          _Dot(),
-          _Dot(),
+          _Dot(index: 0),
+          _Dot(index: 1),
+          _Dot(index: 2),
         ],
       ),
     );
@@ -40,6 +40,10 @@ class _Dots extends StatelessWidget {
 }
 
 class _Dot extends StatelessWidget {
+  final int index;
+
+  const _Dot({required this.index});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,10 +58,32 @@ class _Dot extends StatelessWidget {
   }
 }
 
-class _Slides extends StatelessWidget {
+class _Slides extends StatefulWidget {
+  @override
+  State<_Slides> createState() => _SlidesState();
+}
+
+class _SlidesState extends State<_Slides> {
+  final pageViewController = PageController();
+
+  @override
+  void initState() {
+    pageViewController.addListener(() {
+      print('Pagina: ${pageViewController.page}');
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    pageViewController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageView(
+      controller: pageViewController,
       children: const [
         _Slide(svg: 'assets/slide-1.svg'),
         _Slide(svg: 'assets/slide-2.svg'),
